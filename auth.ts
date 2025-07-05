@@ -54,6 +54,7 @@ const sessionMaxAge = 60 * 60 * 24 * 30
 const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: process.env.SESSION_SECRET,
+  secure: false,
 })
 
 export { withAuth, session }
