@@ -254,6 +254,274 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
 }
 
+type Intruder {
+  id: ID!
+  manufacturer: IntruderManufacturerType
+  model: String
+  code: String
+}
+
+enum IntruderManufacturerType {
+  Hikvision
+  Dahua
+  Unbranded
+  Pyronix
+  Texecom
+  Honeywell
+  Other
+}
+
+input IntruderWhereUniqueInput {
+  id: ID
+}
+
+input IntruderWhereInput {
+  AND: [IntruderWhereInput!]
+  OR: [IntruderWhereInput!]
+  NOT: [IntruderWhereInput!]
+  id: IDFilter
+  manufacturer: IntruderManufacturerTypeNullableFilter
+  model: StringFilter
+  code: StringFilter
+}
+
+input IntruderManufacturerTypeNullableFilter {
+  equals: IntruderManufacturerType
+  in: [IntruderManufacturerType!]
+  notIn: [IntruderManufacturerType!]
+  not: IntruderManufacturerTypeNullableFilter
+}
+
+input IntruderOrderByInput {
+  id: OrderDirection
+  manufacturer: OrderDirection
+  model: OrderDirection
+  code: OrderDirection
+}
+
+input IntruderUpdateInput {
+  manufacturer: IntruderManufacturerType
+  model: String
+  code: String
+}
+
+input IntruderUpdateArgs {
+  where: IntruderWhereUniqueInput!
+  data: IntruderUpdateInput!
+}
+
+input IntruderCreateInput {
+  manufacturer: IntruderManufacturerType
+  model: String
+  code: String
+}
+
+type Block {
+  id: ID!
+  title: String
+  content: String
+}
+
+input BlockWhereUniqueInput {
+  id: ID
+}
+
+input BlockWhereInput {
+  AND: [BlockWhereInput!]
+  OR: [BlockWhereInput!]
+  NOT: [BlockWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  content: StringFilter
+}
+
+input BlockOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  content: OrderDirection
+}
+
+input BlockUpdateInput {
+  title: String
+  content: String
+}
+
+input BlockUpdateArgs {
+  where: BlockWhereUniqueInput!
+  data: BlockUpdateInput!
+}
+
+input BlockCreateInput {
+  title: String
+  content: String
+}
+
+type Product {
+  id: ID!
+  discipline: ProductDisciplineType
+  manufacturer: Manufacturer
+  name: String
+  code: String
+  info(where: BlockWhereInput! = {}, orderBy: [BlockOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BlockWhereUniqueInput): [Block!]
+  infoCount(where: BlockWhereInput! = {}): Int
+}
+
+enum ProductDisciplineType {
+  CCTV
+  Intruder
+  Fire
+  AccessControl
+  Other
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  discipline: ProductDisciplineTypeNullableFilter
+  manufacturer: ManufacturerWhereInput
+  name: StringFilter
+  code: StringFilter
+  info: BlockManyRelationFilter
+}
+
+input ProductDisciplineTypeNullableFilter {
+  equals: ProductDisciplineType
+  in: [ProductDisciplineType!]
+  notIn: [ProductDisciplineType!]
+  not: ProductDisciplineTypeNullableFilter
+}
+
+input BlockManyRelationFilter {
+  every: BlockWhereInput
+  some: BlockWhereInput
+  none: BlockWhereInput
+}
+
+input ProductOrderByInput {
+  id: OrderDirection
+  discipline: OrderDirection
+  name: OrderDirection
+  code: OrderDirection
+}
+
+input ProductUpdateInput {
+  discipline: ProductDisciplineType
+  manufacturer: ManufacturerRelateToOneForUpdateInput
+  name: String
+  code: String
+  info: BlockRelateToManyForUpdateInput
+}
+
+input ManufacturerRelateToOneForUpdateInput {
+  create: ManufacturerCreateInput
+  connect: ManufacturerWhereUniqueInput
+  disconnect: Boolean
+}
+
+input BlockRelateToManyForUpdateInput {
+  disconnect: [BlockWhereUniqueInput!]
+  set: [BlockWhereUniqueInput!]
+  create: [BlockCreateInput!]
+  connect: [BlockWhereUniqueInput!]
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  discipline: ProductDisciplineType
+  manufacturer: ManufacturerRelateToOneForCreateInput
+  name: String
+  code: String
+  info: BlockRelateToManyForCreateInput
+}
+
+input ManufacturerRelateToOneForCreateInput {
+  create: ManufacturerCreateInput
+  connect: ManufacturerWhereUniqueInput
+}
+
+input BlockRelateToManyForCreateInput {
+  create: [BlockCreateInput!]
+  connect: [BlockWhereUniqueInput!]
+}
+
+type Manufacturer {
+  id: ID!
+  name: String
+  website: String
+  support: String
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
+}
+
+input ManufacturerWhereUniqueInput {
+  id: ID
+}
+
+input ManufacturerWhereInput {
+  AND: [ManufacturerWhereInput!]
+  OR: [ManufacturerWhereInput!]
+  NOT: [ManufacturerWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  website: StringFilter
+  support: StringFilter
+  products: ProductManyRelationFilter
+}
+
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
+input ManufacturerOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  website: OrderDirection
+  support: OrderDirection
+}
+
+input ManufacturerUpdateInput {
+  name: String
+  website: String
+  support: String
+  products: ProductRelateToManyForUpdateInput
+}
+
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+input ManufacturerUpdateArgs {
+  where: ManufacturerWhereUniqueInput!
+  data: ManufacturerUpdateInput!
+}
+
+input ManufacturerCreateInput {
+  name: String
+  website: String
+  support: String
+  products: ProductRelateToManyForCreateInput
+}
+
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -278,6 +546,30 @@ type Mutation {
   updateTags(data: [TagUpdateArgs!]!): [Tag]
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createIntruder(data: IntruderCreateInput!): Intruder
+  createIntruders(data: [IntruderCreateInput!]!): [Intruder]
+  updateIntruder(where: IntruderWhereUniqueInput!, data: IntruderUpdateInput!): Intruder
+  updateIntruders(data: [IntruderUpdateArgs!]!): [Intruder]
+  deleteIntruder(where: IntruderWhereUniqueInput!): Intruder
+  deleteIntruders(where: [IntruderWhereUniqueInput!]!): [Intruder]
+  createBlock(data: BlockCreateInput!): Block
+  createBlocks(data: [BlockCreateInput!]!): [Block]
+  updateBlock(where: BlockWhereUniqueInput!, data: BlockUpdateInput!): Block
+  updateBlocks(data: [BlockUpdateArgs!]!): [Block]
+  deleteBlock(where: BlockWhereUniqueInput!): Block
+  deleteBlocks(where: [BlockWhereUniqueInput!]!): [Block]
+  createProduct(data: ProductCreateInput!): Product
+  createProducts(data: [ProductCreateInput!]!): [Product]
+  updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
+  updateProducts(data: [ProductUpdateArgs!]!): [Product]
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
+  createManufacturer(data: ManufacturerCreateInput!): Manufacturer
+  createManufacturers(data: [ManufacturerCreateInput!]!): [Manufacturer]
+  updateManufacturer(where: ManufacturerWhereUniqueInput!, data: ManufacturerUpdateInput!): Manufacturer
+  updateManufacturers(data: [ManufacturerUpdateArgs!]!): [Manufacturer]
+  deleteManufacturer(where: ManufacturerWhereUniqueInput!): Manufacturer
+  deleteManufacturers(where: [ManufacturerWhereUniqueInput!]!): [Manufacturer]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -310,6 +602,18 @@ type Query {
   tag(where: TagWhereUniqueInput!): Tag
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  intruder(where: IntruderWhereUniqueInput!): Intruder
+  intruders(where: IntruderWhereInput! = {}, orderBy: [IntruderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: IntruderWhereUniqueInput): [Intruder!]
+  intrudersCount(where: IntruderWhereInput! = {}): Int
+  block(where: BlockWhereUniqueInput!): Block
+  blocks(where: BlockWhereInput! = {}, orderBy: [BlockOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BlockWhereUniqueInput): [Block!]
+  blocksCount(where: BlockWhereInput! = {}): Int
+  product(where: ProductWhereUniqueInput!): Product
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
+  manufacturer(where: ManufacturerWhereUniqueInput!): Manufacturer
+  manufacturers(where: ManufacturerWhereInput! = {}, orderBy: [ManufacturerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ManufacturerWhereUniqueInput): [Manufacturer!]
+  manufacturersCount(where: ManufacturerWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

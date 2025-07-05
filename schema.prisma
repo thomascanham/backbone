@@ -36,3 +36,55 @@ model Tag {
   name  String @default("")
   posts Post[] @relation("Post_tags")
 }
+
+model Intruder {
+  id           String                    @id @default(cuid())
+  manufacturer IntruderManufacturerType? @default(Unbranded)
+  model        String                    @default("")
+  code         String                    @default("")
+}
+
+model Block {
+  id                String    @id @default(cuid())
+  title             String    @default("")
+  content           String    @default("")
+  from_Product_info Product[] @relation("Product_info")
+}
+
+model Product {
+  id             String                 @id @default(cuid())
+  discipline     ProductDisciplineType?
+  manufacturer   Manufacturer?          @relation("Product_manufacturer", fields: [manufacturerId], references: [id])
+  manufacturerId String?                @map("manufacturer")
+  name           String                 @default("")
+  code           String                 @default("")
+  info           Block[]                @relation("Product_info")
+
+  @@index([manufacturerId])
+}
+
+model Manufacturer {
+  id       String    @id @default(cuid())
+  name     String    @default("")
+  website  String    @default("")
+  support  String    @default("")
+  products Product[] @relation("Product_manufacturer")
+}
+
+enum IntruderManufacturerType {
+  Hikvision
+  Dahua
+  Unbranded
+  Pyronix
+  Texecom
+  Honeywell
+  Other
+}
+
+enum ProductDisciplineType {
+  CCTV
+  Intruder
+  Fire
+  AccessControl
+  Other
+}

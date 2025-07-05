@@ -26,6 +26,12 @@ import { document } from '@keystone-6/fields-document'
 // the generated types from '.keystone/types'
 import { type Lists } from '.keystone/types'
 
+// our custom schemas
+import { Intruder } from './schema/Intruder';
+import { Block } from './schema/Block';
+import { Product } from './schema/Product'
+import { Manufacturer } from './schema/Manufacturer'
+
 export const lists = {
   User: list({
     // WARNING
@@ -146,4 +152,9 @@ export const lists = {
       posts: relationship({ ref: 'Post.tags', many: true }),
     },
   }),
+
+  Intruder,
+  Block,
+  Product,
+  Manufacturer
 } satisfies Lists
