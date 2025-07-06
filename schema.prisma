@@ -11,15 +11,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id        String    @id @default(cuid())
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  posts     Post[]    @relation("Post_author")
-  createdAt DateTime? @default(now())
-}
-
 model Post {
   id       String  @id @default(cuid())
   title    String  @default("")
@@ -35,6 +26,21 @@ model Tag {
   id    String @id @default(cuid())
   name  String @default("")
   posts Post[] @relation("Post_tags")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  isActive  Boolean   @default(true)
+  role      Role?     @relation("User_role", fields: [roleId], references: [id])
+  roleId    String?   @map("role")
+  firstName String    @default("")
+  surname   String    @default("")
+  email     String    @unique @default("")
+  password  String
+  posts     Post[]    @relation("Post_author")
+  createdAt DateTime? @default(now())
+
+  @@index([roleId])
 }
 
 model Intruder {
@@ -69,6 +75,19 @@ model Manufacturer {
   website  String    @default("")
   support  String    @default("")
   products Product[] @relation("Product_manufacturer")
+}
+
+model Role {
+  id                     String  @id @default(cuid())
+  name                   String  @default("")
+  canViewProducts        Boolean @default(false)
+  canCreateProducts      Boolean @default(false)
+  canUpdateProducts      Boolean @default(false)
+  canDeleteProducts      Boolean @default(false)
+  canManageRoles         Boolean @default(false)
+  canManageUsers         Boolean @default(false)
+  canManageManufacturers Boolean @default(false)
+  users                  User[]  @relation("User_role")
 }
 
 enum IntruderManufacturerType {

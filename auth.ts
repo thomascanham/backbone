@@ -29,7 +29,21 @@ const { withAuth } = createAuth({
   // this is a GraphQL query fragment for fetching what data will be attached to a context.session
   //   this can be helpful for when you are writing your access control functions
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  sessionData: 'name createdAt',
+  sessionData: `
+  id
+  name
+  email
+  isActive
+  role {
+    name
+    canViewProducts
+    canCreateProducts
+    canUpdateProducts
+    canDeleteProducts
+    canManageUsers
+    canManageRoles
+  }
+  `,
   secretField: 'password',
 
   // WARNING: remove initFirstItem functionality in production
@@ -43,6 +57,11 @@ const { withAuth } = createAuth({
     // it uses context.sudo() to do this, which bypasses any access control you might have
     //   you shouldn't use this in production
   },
+
+  isAccessAllowed: ({ session }) => {
+    return !!session?.data?.isActive;
+  },
+
 })
 
 // statelessSessions uses cookies for session tracking

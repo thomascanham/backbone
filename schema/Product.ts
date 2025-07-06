@@ -1,9 +1,23 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text } from "@keystone-6/core/fields";
+import { permissions } from "../access";
 
 export const Product = list({
-  access: allowAll,
+  access: {
+    item: {
+      query: permissions.canViewProducts,
+      create: permissions.canCreateProducts,
+      update: permissions.canUpdateProducts,
+      delete: permissions.canDeleteProducts,
+    },
+    operation: {
+      query: permissions.canViewProducts,
+      create: permissions.canCreateProducts,
+      update: permissions.canUpdateProducts,
+      delete: permissions.canDeleteProducts,
+    },
+  },
 
   fields: {
     discipline: select({
@@ -37,10 +51,12 @@ export const Product = list({
       ref: 'Block',
       many: true,
       ui: {
+        isHidden: ({ session }) => !session.data?.permissions.canViewProducts,
         displayMode: 'cards',
         cardFields: ['title', 'content'],
         inlineEdit: { fields: ['title', 'content'] },
         inlineCreate: { fields: ['title', 'content'] },
+        hideCreate: !permissions.canCreateProducts,
       }
     })
   }, 
